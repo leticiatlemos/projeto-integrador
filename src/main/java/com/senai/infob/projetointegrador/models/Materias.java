@@ -1,5 +1,7 @@
 package com.senai.infob.projetointegrador.models;
 
+import java.sql.Blob;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,12 @@ public class Materias {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
+
+    @Column(name="nome")
+    private String name;
+
+    @Column(name="conteudo")
+    private Blob conteudo;
 
     
 }
