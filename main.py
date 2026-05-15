@@ -1,3 +1,7 @@
+import fastapi as fastapi
+import sqlalchemy as sqlalchemy
+import pydantic as pydantic
+
 from fastapi import FastAPI
 from sqlalchemy import create_engine, Column, String, Integer, LocalDate, Text, ForeignKey, PrimaryKeyConstraint, LocalDateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -6,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-database_url = x
+database_url = "postgresql://focoplusfinal_user:eTdOMw6Ub37nuw8HvwFtsqM8kaXQPBvX@dpg-d7h43la8qa3s73ctnieg-a.oregon-postgres.render.com/focoplusfinal"
 
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind=engine)
@@ -408,7 +412,7 @@ def pesquisarAula(titulo: str):
     conexao = SessionLocal()
     t = input()
     ti = t.split(" ")
-    tt = conexao.query(Aula).filter((ttt in ti) in Aula.titulo).first()
+    tt = conexao.query(Aula).filter((t2 in ti) in Aula.titulo).first()
     conexao.close()
     if tt:
         return{"aulas": ModelAula.model_validate(tt).dict()}
