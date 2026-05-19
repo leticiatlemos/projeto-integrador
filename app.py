@@ -3,7 +3,7 @@ import sqlalchemy as sqlalchemy
 import pydantic as pydantic
 
 from fastapi import FastAPI
-from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime
+from sqlalchemy import create_engine, Column, String, Integer, LocalDate, Text, ForeignKey, PrimaryKeyConstraint, LocalDateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
@@ -25,7 +25,7 @@ class Usuario(Base):
     senha = Column(String(8), nullable=False)
     nome = Column(String(100), nullable=False)
     numero = Column(String(13), nullable=False, unique=True)
-    data_nascimento = Column(Date, nullable=False)
+    data_nascimento = Column(LocalDate, nullable=False)
     deficiencia = Column(Integer, ForeignKey("deficiencia.id"), nullable=False)
     status = Column(String(100), nullable=False)
     objetivo = Column(Text, nullable=False)
@@ -60,7 +60,7 @@ class Aula(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     titulo = Column(String(100), nullable=False)
     materia_id = Column(Integer, ForeignKey("materia.id"), nullable=False)
-    data_aula = Column(Date, nullable=False)
+    data_aula = Column(LocalDate, nullable=False)
     conteudo = Column(Text, nullable=False)
     video = Column(Text, nullable=False)
     notes = Column(Text, nullable=False)
@@ -92,7 +92,7 @@ class ModelAulaUsuario(BaseModel):
 class Anotacao(Base):
     __tablename__ = "anotacao"
     id = Column(Integer, primary_key = True, nullable=False)
-    data_criacao = Column(DateTime, nullable=False)
+    data_criacao = Column(LocalDateTime, nullable=False)
     conteudo = Column(Text, nullable=False)
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
 
@@ -294,10 +294,8 @@ def buscarAnotacao(id = str):
     an = conexao.query(Anotacao).filter(Anotacao.id==id).first()
     conexao.close()
     if an:
-        return{"anotacoes": ModelAnotacao.model_validate(an).dict}
+        return{"anotacoes": ModelAnotacao.model_validate(an).dict()}
     return {"mensagem": "Anotação não encontrada."}
-
-# fazer: novidades, materia, revisao
 
 @app.get("/redacao/id")
 def buscarRedacao(id = str):
@@ -305,7 +303,7 @@ def buscarRedacao(id = str):
     r = conexao.query(Redacao).filter(Redacao.id==id).first()
     conexao.close()
     if r:
-        return{"redacoes": ModelRedacao.model_validate(r).dict}
+        return{"redacoes": ModelRedacao.model_validate(r).dict()}
     return {"mensagem": "Redação não encontrada."}
 
 @app.get("/simulado/id")
@@ -314,8 +312,35 @@ def buscarSimulado(id = str):
     s = conexao.query(Simulado).filter(Simulado.id==id).first()
     conexao.close()
     if s:
-        return{"simulados": ModelAnotacao.model_validate(s).dict}
+        return{"simulados": ModelSimulado.model_validate(s).dict()}
     return {"mensagem": "Simulado não encontrado."}
+
+@app.get("novidades/id")
+def buscarNovidades(id = str):
+    conexao = SessionLocal()
+    n = conexao.query(Novidades).filter(Novidades.id==id).first()
+    conexao.close()
+    if n:
+        return{"novidades": ModelNovidades.model_validate(n).dict()}
+    return {"mensagem": "Notícia não encontrada."}
+
+@app.get("materia/id")
+def buscarMateria(id = str):
+    conexao = SessionLocal()
+    m = conexao.query(Materia).filter(Materia.id==id).first()
+    conexao.close()
+    if m:
+        return{"materia": ModelMateria.model_validate(m).dict()}
+    return {"mensagem": "Matéria não encontrada."}
+
+@app.get("revisao/id")
+def buscarRevisao(id = str):
+    conexao = SessionLocal()
+    r = conexao.query(Revisao).filter(Revisao.id==id).first()
+    conexao.close()
+    if r:
+        return{"revisao": ModelRevisao.model_validate(r).dict()}
+    return {"mensagem": "Revisão não encontrada."}
 
 ## Cadastro de Itens (métodos POST)
 
@@ -359,8 +384,8 @@ def criarAulaUsuario(au: ModelAulaUsuario):
     conexao.close()
     return {"mensagem": "Conexão Aula-Usuário cadastrada com sucesso!", "aulausuario": ModelAulaUsuario.model_validate(novaAulaUsuario).dict()}
 
-@app.post("/aulausuarioCadastro")
-def criarAulaUsuario(an: ModelAnotacao):
+@app.post("/anotacaoCadastro")
+def criarAnotacao(an: ModelAnotacao):
     conexao = SessionLocal()
     novaAnotacao = Anotacao(**an.dict())
     conexao.add(novaAnotacao)
@@ -369,7 +394,27 @@ def criarAulaUsuario(an: ModelAnotacao):
     conexao.close()
     return {"mensagem": "Anotação cadastrada com sucesso!", "anotacao": ModelAnotacao.model_validate(novaAnotacao).dict()}
 
-# fazer: redacao, simulado, novidades, materia, revisao
+# fazer: novidades, materia, revisao
+
+@app.post("/redacaoCadastro")
+def criarRedacao(r: ModelRedacao):
+    conexao = SessionLocal()
+    novaRedacao = Redacao(**r.dict())
+    conexao.add(novaRedacao)
+    conexao.commit()
+    conexao.refresh(novaRedacao)
+    conexao.close()
+    return {"mensagem": "Redação cadastrada com sucesso!", "redacao": ModelRedacao.model_validate(novaRedacao).dict()}
+
+@app.post("/simuladoCadastro")
+def criarSimulado(s: ModelSimulado):
+    conexao = SessionLocal()
+    novoSimulado = Simulado(**s.dict())
+    conexao.add(novoSimulado)
+    conexao.commit()
+    conexao.refresh(novoSimulado)
+    conexao.close()
+    return {"mensagem": "Simulado cadastrado com sucesso!", "simulado": ModelSimulado.model_validate(novoSimulado).dict()}
 
 ### Login
 @app.get("/login")
