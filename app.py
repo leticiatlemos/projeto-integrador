@@ -3,7 +3,7 @@ import sqlalchemy as sqlalchemy
 import pydantic as pydantic
 
 from fastapi import FastAPI
-from sqlalchemy import create_engine, Column, String, Integer, LocalDate, Text, ForeignKey, PrimaryKeyConstraint, LocalDateTime
+from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
@@ -25,7 +25,7 @@ class Usuario(Base):
     senha = Column(String(8), nullable=False)
     nome = Column(String(100), nullable=False)
     numero = Column(String(13), nullable=False, unique=True)
-    data_nascimento = Column(LocalDate, nullable=False)
+    data_nascimento = Column(Date, nullable=False)
     deficiencia = Column(Integer, ForeignKey("deficiencia.id"), nullable=False)
     status = Column(String(100), nullable=False)
     objetivo = Column(Text, nullable=False)
@@ -60,7 +60,7 @@ class Aula(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     titulo = Column(String(100), nullable=False)
     materia_id = Column(Integer, ForeignKey("materia.id"), nullable=False)
-    data_aula = Column(LocalDate, nullable=False)
+    data_aula = Column(Date, nullable=False)
     conteudo = Column(Text, nullable=False)
     video = Column(Text, nullable=False)
     notes = Column(Text, nullable=False)
@@ -92,7 +92,7 @@ class ModelAulaUsuario(BaseModel):
 class Anotacao(Base):
     __tablename__ = "anotacao"
     id = Column(Integer, primary_key = True, nullable=False)
-    data_criacao = Column(LocalDateTime, nullable=False)
+    data_criacao = Column(DateTime, nullable=False)
     conteudo = Column(Text, nullable=False)
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
 
