@@ -40,3 +40,4 @@ urllib3==2.7.0
 uvicorn==0.47.0
 yarg==0.1.10
 yarl==1.23.0
+wheel==0.47.0
