@@ -168,6 +168,19 @@ class ModelRevisao(BaseModel):
 
     model_config = {"from_attributes": True}
 
+class Deficiencia(Base):
+    __tablename__ = "deficiencia"
+    id = Column(Integer, primary_key = true, nullable = False)
+    nome = Column(String, nullable = False)
+    acomodacao_recomendada = Column(String, nullable = False)
+
+class ModelDeficiencia(BaseModel):
+    id: str
+    nome: str
+    acomodacao_recomendada: str
+    
+    model_config = {"from_attributes": True}
+
 # Base.metadata.create_all(bind=engine)
 
 # métodos
@@ -244,6 +257,14 @@ def listarRevisoes():
     revisoes = conexao.query(Revisao).all()
     conexao.close()
     return{"revisoes": [ModelRevisao.model_validate(re).dict for re in revisoes]}
+
+
+@app.get("/deficiencia")
+def listarDeficiencias():
+    conexao = SessionLocal()
+    deficiencias = conexao.query(Deficiencia).all()
+    conexao.close()
+    return{"deficiencias": [ModelRevisao.model_validate(d).dict for d in deficiencias]}
 
 ### Por ID
 
@@ -341,6 +362,16 @@ def buscarRevisao(id: str):
         return{"revisao": ModelRevisao.model_validate(r).dict()}
     return {"mensagem": "Revisão não encontrada."}
 
+
+@app.get("deficiencia/id")
+def buscarDeficiencia(id: str):
+    conexao = SessionLocal()
+    d = conexao.query(Deficiencia).filter(Deficiencia.id==id).first()
+    conexao.close()
+    if d:
+        return{"deficiencia": ModelRevisao.model_validate(d).dict()}
+    return {"mensagem": "Deficiência não encontrada."}
+
 ## Cadastro de Itens (métodos POST)
 
 @app.post("/usuarioCadastro")
@@ -414,6 +445,18 @@ def criarSimulado(s: ModelSimulado):
     conexao.refresh(novoSimulado)
     conexao.close()
     return {"mensagem": "Simulado cadastrado com sucesso!", "simulado": ModelSimulado.model_validate(novoSimulado).dict()}
+
+
+
+@app.post("/deficienciaCadastro")
+def criarDeficiencia(d: ModelDeficiencia):
+    conexao = SessionLocal()
+    novaDeficiencia = Deficiencia(**d.dict())
+    conexao.add(novaDeficiencia)
+    conexao.commit()
+    conexao.refresh(novaDeficiencia)
+    conexao.close()
+    return {"mensagem": "Deficiencia cadastrada com sucesso!", "deficiencia": ModelDeficiencia.model_validate(novaDeficiencia).dict()}
 
 ### Login
 @app.get("/login")
