@@ -170,7 +170,7 @@ class ModelRevisao(BaseModel):
 
 class Deficiencia(Base):
     __tablename__ = "deficiencia"
-    id = Column(Integer, primary_key = true, nullable = False)
+    id = Column(Integer, primary_key = True, nullable = False)
     nome = Column(String, nullable = False)
     acomodacao_recomendada = Column(String, nullable = False)
 
