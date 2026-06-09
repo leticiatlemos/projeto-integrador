@@ -142,7 +142,7 @@ class ModelNovidades(BaseModel):
     id: str
     noticias: str
 
-    model_config = {"from_attributes"}
+    model_config = {"from_attributes": True}
 
 class Materia(Base):
     __tablename__ = "materia"
