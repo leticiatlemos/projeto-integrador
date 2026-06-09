@@ -150,8 +150,8 @@ class Materia(Base):
     area = Column(String(100), nullable = False, unique = True)
 
 class ModelMateria(BaseModel):
-    id = str
-    area = str
+    id: str
+    area: str
 
     model_config = {"from_attributes": True}
 
@@ -162,9 +162,9 @@ class Revisao(Base):
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable = False)
 
 class ModelRevisao(BaseModel):
-    id = str
-    conteudo = str
-    aula_id = str
+    id: str
+    conteudo: str
+    aula_id: str
 
     model_config = {"from_attributes": True}
 
@@ -288,7 +288,7 @@ def buscaAlunoAula(aluno_id: str, aula_id: str):
 
 
 @app.get("/anotacao/id")
-def buscarAnotacao(id = str):
+def buscarAnotacao(id: str):
     conexao = SessionLocal()
     an = conexao.query(Anotacao).filter(Anotacao.id==id).first()
     conexao.close()
@@ -297,7 +297,7 @@ def buscarAnotacao(id = str):
     return {"mensagem": "Anotação não encontrada."}
 
 @app.get("/redacao/id")
-def buscarRedacao(id = str):
+def buscarRedacao(id: str):
     conexao = SessionLocal()
     r = conexao.query(Redacao).filter(Redacao.id==id).first()
     conexao.close()
@@ -306,7 +306,7 @@ def buscarRedacao(id = str):
     return {"mensagem": "Redação não encontrada."}
 
 @app.get("/simulado/id")
-def buscarSimulado(id = str):
+def buscarSimulado(id: str):
     conexao = SessionLocal()
     s = conexao.query(Simulado).filter(Simulado.id==id).first()
     conexao.close()
@@ -315,7 +315,7 @@ def buscarSimulado(id = str):
     return {"mensagem": "Simulado não encontrado."}
 
 @app.get("novidades/id")
-def buscarNovidades(id = str):
+def buscarNovidades(id: str):
     conexao = SessionLocal()
     n = conexao.query(Novidades).filter(Novidades.id==id).first()
     conexao.close()
@@ -324,7 +324,7 @@ def buscarNovidades(id = str):
     return {"mensagem": "Notícia não encontrada."}
 
 @app.get("materia/id")
-def buscarMateria(id = str):
+def buscarMateria(id: str):
     conexao = SessionLocal()
     m = conexao.query(Materia).filter(Materia.id==id).first()
     conexao.close()
@@ -333,7 +333,7 @@ def buscarMateria(id = str):
     return {"mensagem": "Matéria não encontrada."}
 
 @app.get("revisao/id")
-def buscarRevisao(id = str):
+def buscarRevisao(id: str):
     conexao = SessionLocal()
     r = conexao.query(Revisao).filter(Revisao.id==id).first()
     conexao.close()
