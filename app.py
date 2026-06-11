@@ -34,7 +34,6 @@ class ModelUsuario(BaseModel):
     id: str
     email: str
     senha: str
-    cpf: str
     nome: str
     data_nascimento: str
     genero: str
