@@ -3,7 +3,7 @@ import sqlalchemy as sqlalchemy
 import pydantic as pydantic
 
 from fastapi import FastAPI
-from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime
+from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker, declarative_base
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
@@ -183,7 +183,11 @@ class ModelNeurodivergencia(BaseModel):
     
     model_config = {"from_attributes": True}
 
-# Base.metadata.create_all(bind=engine)
+class Premiacao(Base):
+    __tablename__ = "premiacao"
+    id = Column(Integer, primary_key = True, nullable = False)
+    medalha = Column(Boolean)
+    simulado_id = Column(Integer, ForeignKey("simulado.id"), nullable = False)
 
 # métodos
 ## Listagem de Itens (métodos GET)
