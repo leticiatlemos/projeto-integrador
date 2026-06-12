@@ -26,7 +26,7 @@ class Usuario(Base):
     nome = Column(String(100), nullable=False)
     numero = Column(String(13), nullable=False, unique=True)
     data_nascimento = Column(Date, nullable=False)
-    deficiencia = Column(Integer, ForeignKey("deficiencia.id"), nullable=False)
+    neurodivergencia_id = Column(Integer, ForeignKey("neurodivergencia.id"), nullable=False)
     status = Column(String(100), nullable=False)
     objetivo = Column(Text, nullable=False)
 
@@ -37,7 +37,7 @@ class ModelUsuario(BaseModel):
     nome: str
     numero: str
     data_nascimento: str
-    deficiencia: str
+    neurodivergencia_id: str
     status: str
     objetivo: str
 
@@ -168,16 +168,18 @@ class ModelRevisao(BaseModel):
 
     model_config = {"from_attributes": True}
 
-class Deficiencia(Base):
-    __tablename__ = "deficiencia"
+class Neurodivergencia(Base):
+    __tablename__ = "neurodivergencia"
     id = Column(Integer, primary_key = True, nullable = False)
-    nome = Column(String, nullable = False)
-    acomodacao_recomendada = Column(String, nullable = False)
+    neurodivergencia = Column(String, nullable = False)
+    especificacao = Column(String)
+    descricao = Column(Text, nullable = False)
 
-class ModelDeficiencia(BaseModel):
+class ModelNeurodivergencia(BaseModel):
     id: str
-    nome: str
-    acomodacao_recomendada: str
+    neurodivergencia: str
+    especificacao: str
+    descricao: str
     
     model_config = {"from_attributes": True}
 
@@ -259,12 +261,12 @@ def listarRevisoes():
     return{"revisoes": [ModelRevisao.model_validate(re).dict for re in revisoes]}
 
 
-@app.get("/deficiencia")
-def listarDeficiencias():
+@app.get("/neurodivergencia")
+def listarNeurodivergencias():
     conexao = SessionLocal()
-    deficiencias = conexao.query(Deficiencia).all()
+    neurodivergencias = conexao.query(Neurodivergencia).all()
     conexao.close()
-    return{"deficiencias": [ModelRevisao.model_validate(d).dict for d in deficiencias]}
+    return{"neurodivergencias": [ModelRevisao.model_validate(d).dict for d in neurodivergencias]}
 
 ### Por ID
 
@@ -363,13 +365,13 @@ def buscarRevisao(id: str):
     return {"mensagem": "Revisão não encontrada."}
 
 
-@app.get("deficiencia/id")
-def buscarDeficiencia(id: str):
+@app.get("neurodivergencia/id")
+def buscarNeurodivergencia(id: str):
     conexao = SessionLocal()
-    d = conexao.query(Deficiencia).filter(Deficiencia.id==id).first()
+    d = conexao.query(Neurodivergencia).filter(Neurodivergencia.id==id).first()
     conexao.close()
     if d:
-        return{"deficiencia": ModelRevisao.model_validate(d).dict()}
+        return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
     return {"mensagem": "Deficiência não encontrada."}
 
 ## Cadastro de Itens (métodos POST)
@@ -448,15 +450,15 @@ def criarSimulado(s: ModelSimulado):
 
 
 
-@app.post("/deficienciaCadastro")
-def criarDeficiencia(d: ModelDeficiencia):
+@app.post("/neurodivergenciaCadastro")
+def criarNeurodivergencia(d: ModelNeurodivergencia):
     conexao = SessionLocal()
-    novaDeficiencia = Deficiencia(**d.dict())
-    conexao.add(novaDeficiencia)
+    novaNeurodivergencia = Neurodivergencia(**d.dict())
+    conexao.add(novaNeurodivergencia)
     conexao.commit()
-    conexao.refresh(novaDeficiencia)
+    conexao.refresh(novaNeurodivergencia)
     conexao.close()
-    return {"mensagem": "Deficiencia cadastrada com sucesso!", "deficiencia": ModelDeficiencia.model_validate(novaDeficiencia).dict()}
+    return {"mensagem": "Neurodivergencia cadastrada com sucesso!", "neurodivergencia": ModelNeurodivergencia.model_validate(novaNeurodivergencia).dict()}
 
 ### Login
 @app.get("/login")
