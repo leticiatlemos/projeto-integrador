@@ -35,9 +35,9 @@ class ModelUsuario(BaseModel):
     email: str
     senha: str
     nome: str
+    numero: str
     data_nascimento: str
-    genero: str
-    neurodivergencia: str
+    deficiencia: str
     status: str
     objetivo: str
 
@@ -68,12 +68,13 @@ class Aula(Base):
 class ModelAula(BaseModel):
     id: str
     titulo: str
-    materia: str
+    materia_id: str
     data_aula: str
     conteudo: str
     video: str
     notes: str
     empresa_id: str
+    
     model_config = {"from_attributes": True}
 
 class AulaUsuario(Base):
