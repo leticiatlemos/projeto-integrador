@@ -35,7 +35,7 @@ class ModelUsuario(BaseModel):
     senha: str
     nome: str
     numero: str
-    data_nascimento: str
+    data_nascimento: date
     neurodivergencia_id: int
     objetivo: str
 
@@ -67,7 +67,7 @@ class ModelAula(BaseModel):
     id: int
     titulo: str
     materia_id: int
-    data_aula: str
+    data_aula: date
     conteudo: str
     video: str
     notes: str
@@ -95,7 +95,7 @@ class Anotacao(Base):
 
 class ModelAnotacao(BaseModel):
     id: int
-    data_criacao: str
+    data_criacao: date
     conteudo: str
     aula_id: int
 
