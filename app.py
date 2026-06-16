@@ -27,7 +27,6 @@ class Usuario(Base):
     numero = Column(String(13), nullable=False, unique=True)
     data_nascimento = Column(Date, nullable=False)
     neurodivergencia_id = Column(Integer, ForeignKey("neurodivergencia.id"), nullable=False)
-    status = Column(String(100), nullable=False)
     objetivo = Column(Text, nullable=False)
 
 class ModelUsuario(BaseModel):
@@ -38,7 +37,6 @@ class ModelUsuario(BaseModel):
     numero: str
     data_nascimento: str
     neurodivergencia_id: int
-    status: str
     objetivo: str
 
     model_config = {"from_attributes": True}
