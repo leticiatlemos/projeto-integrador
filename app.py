@@ -35,10 +35,11 @@ class ModelUsuario(BaseModel):
     senha: str
     nome: str
     numero: str
-    data_nascimento: date
+    data_nascimento: str
     neurodivergencia_id: int
     objetivo: str
 
+    
     model_config = {"from_attributes": True}
 
 class Empresa(Base):
@@ -67,7 +68,7 @@ class ModelAula(BaseModel):
     id: int
     titulo: str
     materia_id: int
-    data_aula: date
+    data_aula: str
     conteudo: str
     video: str
     notes: str
@@ -95,7 +96,7 @@ class Anotacao(Base):
 
 class ModelAnotacao(BaseModel):
     id: int
-    data_criacao: datetime
+    data_criacao: str
     conteudo: str
     aula_id: int
 
