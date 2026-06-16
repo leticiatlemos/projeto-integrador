@@ -95,7 +95,7 @@ class Anotacao(Base):
 
 class ModelAnotacao(BaseModel):
     id: int
-    data_criacao: date
+    data_criacao: datetime
     conteudo: str
     aula_id: int
 
