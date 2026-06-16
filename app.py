@@ -189,10 +189,12 @@ class Premiacao(Base):
     medalha = Column(Boolean)
     simulado_id = Column(Integer, ForeignKey("simulado.id"), nullable = False)
 
-class ModelPremiacao(BaseModel)
-id: int
-medalha: str
-simulado_id: int
+class ModelPremiacao(BaseModel):
+    id: int
+    medalha: str
+    simulado_id: int
+
+    model_config = {"from_attributes": True}
 
 # métodos
 ## Listagem de Itens (métodos GET)
