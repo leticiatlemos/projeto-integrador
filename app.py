@@ -31,13 +31,13 @@ class Usuario(Base):
     objetivo = Column(Text, nullable=False)
 
 class ModelUsuario(BaseModel):
-    id: str
+    id: int
     email: str
     senha: str
     nome: str
     numero: str
     data_nascimento: str
-    neurodivergencia_id: str
+    neurodivergencia_id: int
     status: str
     objetivo: str
 
@@ -49,7 +49,7 @@ class Empresa(Base):
     nome = Column(String(80), nullable=False)
 
 class ModelEmpresa(BaseModel):
-    id: str
+    id: int
     nome: str
 
     model_config = {"from_attributes": True}
@@ -66,14 +66,14 @@ class Aula(Base):
     empresa_id = Column(Integer, ForeignKey("empresa.id"), nullable=False)
 
 class ModelAula(BaseModel):
-    id: str
+    id: int
     titulo: str
-    materia_id: str
+    materia_id: int
     data_aula: str
     conteudo: str
     video: str
     notes: str
-    empresa_id: str
+    empresa_id: int
     
     model_config = {"from_attributes": True}
 
@@ -83,8 +83,8 @@ class AulaUsuario(Base):
     aula_id = Column(Integer, ForeignKey("aula.id"), primary_key =True, nullable=False)
 
 class ModelAulaUsuario(BaseModel):
-    aluno_id: str
-    aula_id: str
+    aluno_id: int
+    aula_id: int
 
     model_config = {"from_attributes": True}
 
@@ -96,10 +96,10 @@ class Anotacao(Base):
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
 
 class ModelAnotacao(BaseModel):
-    id: str
+    id: int
     data_criacao: str
     conteudo: str
-    aula_id: str
+    aula_id: int
 
     model_config = {"from_attributes": True}
 
@@ -112,10 +112,10 @@ class Redacao(Base):
     escrita = Column(Text, nullable = False, unique=True)
 
 class ModelRedacao(BaseModel):
-    id: str
+    id: int
     tema: str
     eixo_tematico: str
-    aluno_id: str
+    aluno_id: int
     escrita: str
 
     model_config = {"from_attributes": True}
@@ -127,8 +127,8 @@ class Simulado(Base):
     exame = Column(Text, nullable = False)
 
 class ModelSimulado(BaseModel):
-    id: str
-    aula_id: str
+    id: int
+    aula_id: int
     exame: str
 
     model_config = {"from_attributes": True}
@@ -139,7 +139,7 @@ class Novidades(Base):
     noticias = Column(Text, nullable = False)
 
 class ModelNovidades(BaseModel):
-    id: str
+    id: int
     noticias: str
 
     model_config = {"from_attributes": True}
@@ -150,7 +150,7 @@ class Materia(Base):
     area = Column(String(100), nullable = False, unique = True)
 
 class ModelMateria(BaseModel):
-    id: str
+    id: int
     area: str
 
     model_config = {"from_attributes": True}
@@ -162,9 +162,9 @@ class Revisao(Base):
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable = False)
 
 class ModelRevisao(BaseModel):
-    id: str
+    id: int
     conteudo: str
-    aula_id: str
+    aula_id: int
 
     model_config = {"from_attributes": True}
 
@@ -176,7 +176,7 @@ class Neurodivergencia(Base):
     descricao = Column(Text, nullable = False)
 
 class ModelNeurodivergencia(BaseModel):
-    id: str
+    id: int
     neurodivergencia: str
     especificacao: str
     descricao: str
@@ -188,6 +188,11 @@ class Premiacao(Base):
     id = Column(Integer, primary_key = True, nullable = False)
     medalha = Column(Boolean)
     simulado_id = Column(Integer, ForeignKey("simulado.id"), nullable = False)
+
+class ModelPremiacao(BaseModel)
+id: int
+medalha: str
+simulado_id: int
 
 # métodos
 ## Listagem de Itens (métodos GET)
@@ -272,10 +277,17 @@ def listarNeurodivergencias():
     conexao.close()
     return{"neurodivergencias": [ModelRevisao.model_validate(d).dict for d in neurodivergencias]}
 
+@app.get("/premiacao")
+def listarPremiacoes():
+    conexao = SessionLocal()
+    premiacoes = conexao.query(Premiacao).all()
+    conexao.close()
+    return{"premiacoes": [ModelRevisao.model_validate(p).dict for p in premiacoes]}
+
 ### Por ID
 
 @app.get("/usuario/id")
-def buscarUsuario(id: str):
+def buscarUsuario(id: int):
     conexao = SessionLocal()
     u = conexao.query(Usuario).filter(Usuario.id == id).first()
     conexao.close()
@@ -284,7 +296,7 @@ def buscarUsuario(id: str):
     return {"mensagem": "Usuário não encontrado."}
 
 @app.get("/empresa/id")
-def buscarEmpresa(id: str):
+def buscarEmpresa(id: int):
     conexao = SessionLocal()
     e = conexao.query(Empresa).filter(Empresa.id==id).first()
     conexao.close()
@@ -293,7 +305,7 @@ def buscarEmpresa(id: str):
     return {"mensagem": "Empresa não encontrada."}
 
 @app.get("/aula/id")
-def buscarAula(id: str):
+def buscarAula(id: int):
     conexao = SessionLocal()
     a = conexao.query(Aula).filter(Aula.id == id).first()
     conexao.close()
@@ -301,10 +313,9 @@ def buscarAula(id: str):
         return{"aulas": ModelUsuario.model_validate(a).dict()}
     return {"mensagem": "Aula não encontrada."}
 
-# fazer: buscar conexão aluno-aula
 
 @app.get("/alunoAula/id")
-def buscaAlunoAula(aluno_id: str, aula_id: str):
+def buscaAlunoAula(aluno_id: int, aula_id: int):
     conexao = SessionLocal()
     us = conexao.query(AulaUsuario).filter(AulaUsuario.aluno_id == aluno_id).first()
     au = conexao.query(AulaUsuario).filter(AulaUsuario.aula_id == aula_id).first()
@@ -315,7 +326,7 @@ def buscaAlunoAula(aluno_id: str, aula_id: str):
 
 
 @app.get("/anotacao/id")
-def buscarAnotacao(id: str):
+def buscarAnotacao(id: int):
     conexao = SessionLocal()
     an = conexao.query(Anotacao).filter(Anotacao.id==id).first()
     conexao.close()
@@ -324,7 +335,7 @@ def buscarAnotacao(id: str):
     return {"mensagem": "Anotação não encontrada."}
 
 @app.get("/redacao/id")
-def buscarRedacao(id: str):
+def buscarRedacao(id: int):
     conexao = SessionLocal()
     r = conexao.query(Redacao).filter(Redacao.id==id).first()
     conexao.close()
@@ -333,7 +344,7 @@ def buscarRedacao(id: str):
     return {"mensagem": "Redação não encontrada."}
 
 @app.get("/simulado/id")
-def buscarSimulado(id: str):
+def buscarSimulado(id: int):
     conexao = SessionLocal()
     s = conexao.query(Simulado).filter(Simulado.id==id).first()
     conexao.close()
@@ -342,7 +353,7 @@ def buscarSimulado(id: str):
     return {"mensagem": "Simulado não encontrado."}
 
 @app.get("novidades/id")
-def buscarNovidades(id: str):
+def buscarNovidades(id: int):
     conexao = SessionLocal()
     n = conexao.query(Novidades).filter(Novidades.id==id).first()
     conexao.close()
@@ -351,7 +362,7 @@ def buscarNovidades(id: str):
     return {"mensagem": "Notícia não encontrada."}
 
 @app.get("materia/id")
-def buscarMateria(id: str):
+def buscarMateria(id: int):
     conexao = SessionLocal()
     m = conexao.query(Materia).filter(Materia.id==id).first()
     conexao.close()
@@ -360,7 +371,7 @@ def buscarMateria(id: str):
     return {"mensagem": "Matéria não encontrada."}
 
 @app.get("revisao/id")
-def buscarRevisao(id: str):
+def buscarRevisao(id: int):
     conexao = SessionLocal()
     r = conexao.query(Revisao).filter(Revisao.id==id).first()
     conexao.close()
@@ -370,13 +381,22 @@ def buscarRevisao(id: str):
 
 
 @app.get("neurodivergencia/id")
-def buscarNeurodivergencia(id: str):
+def buscarNeurodivergencia(id: int):
     conexao = SessionLocal()
     d = conexao.query(Neurodivergencia).filter(Neurodivergencia.id==id).first()
     conexao.close()
     if d:
         return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
-    return {"mensagem": "Deficiência não encontrada."}
+    return {"mensagem": "Neurodivergência não encontrada."}
+
+@app.get("premiacao/id")
+def buscarPremiacao(id: int):
+    conexao = SessionLocal()
+    p = conexao.query(Premiacao).filter(Neurodivergencia.id==id).first()
+    conexao.close()
+    if d:
+        return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
+    return {"mensagem": "Neurodivergência não encontrada."}
 
 ## Cadastro de Itens (métodos POST)
 
@@ -464,6 +484,16 @@ def criarNeurodivergencia(d: ModelNeurodivergencia):
     conexao.close()
     return {"mensagem": "Neurodivergencia cadastrada com sucesso!", "neurodivergencia": ModelNeurodivergencia.model_validate(novaNeurodivergencia).dict()}
 
+@app.post("/PremiacaoCadastro")
+def criarNeurodivergencia(p: ModelPremiacao):
+    conexao = SessionLocal()
+    novaPremiacao = Premiacao(**p.dict())
+    conexao.add(novaNeurodivergencia)
+    conexao.commit()
+    conexao.refresh(novaPremiacao)
+    conexao.close()
+    return {"mensagem": "Premiacao cadastrada com sucesso!", "premiacao": ModelPremiacao.model_validate(novaPremiacao).dict()}
+
 ### Login
 @app.get("/login")
 def login(email: str, senha: str):
@@ -477,7 +507,7 @@ def login(email: str, senha: str):
 
 ### Filtros
 @app.get("/filtrarAulasMateria")
-def filtroAula(materia_id: str):
+def filtroAula(materia_id: int):
     conexao = SessionLocal()
     m = conexao.query(Aula).filter(Aula.materia_id == materia_id).first()
     conexao.close()
@@ -485,7 +515,7 @@ def filtroAula(materia_id: str):
         return{"aulas": ModelAula.model_validate(m).dict()}
 
 @app.get("/filtrarAulasEmpresa")
-def filtroEmpresa(empresa_id: str):
+def filtroEmpresa(empresa_id: int):
     conexao = SessionLocal()
     e = conexao.query(Aula).filter(Aula.empresa_id == empresa_id).first()
     conexao.close()
