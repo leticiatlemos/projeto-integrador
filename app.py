@@ -20,13 +20,13 @@ Base = declarative_base()
 
 class Usuario(Base):
     __tablename__ = "usuario"
-    id = Column(Integer, Identity(), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     email = Column(String(100), nullable=False, unique=True)
     senha = Column(String(8), nullable=False)
     nome = Column(String(100), nullable=False)
     numero = Column(String(13), nullable=False, unique=True)
     data_nascimento = Column(Date, nullable=False)
-    neurodivergencia_id = Column(Integer, Identity(), ForeignKey("neurodivergencia.id"), nullable=False)
+    neurodivergencia_id = Column(Integer, ForeignKey("neurodivergencia.id"), nullable=False)
     objetivo = Column(Text, nullable=False)
 
 class ModelUsuario(BaseModel):
@@ -44,7 +44,7 @@ class ModelUsuario(BaseModel):
 
 class Empresa(Base):
     __tablename__ = "empresa"
-    id = Column(Integer, Identity(), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
     nome = Column(String(80), nullable=False)
 
 class ModelEmpresa(BaseModel):
@@ -55,14 +55,14 @@ class ModelEmpresa(BaseModel):
 
 class Aula(Base):
     __tablename__ = "aula"
-    id = Column(Integer, Identity(), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
     titulo = Column(String(100), nullable=False)
-    materia_id = Column(Integer, Identity(), ForeignKey("materia.id"), nullable=False)
+    materia_id = Column(Integer, ForeignKey("materia.id"), nullable=False)
     data_aula = Column(Date, nullable=False)
     conteudo = Column(Text, nullable=False)
     video = Column(Text, nullable=False)
     notes = Column(Text, nullable=False)
-    empresa_id = Column(Integer, Identity(), ForeignKey("empresa.id"), nullable=False)
+    empresa_id = Column(Integer, ForeignKey("empresa.id"), nullable=False)
 
 class ModelAula(BaseModel):
     id: int
@@ -78,8 +78,8 @@ class ModelAula(BaseModel):
 
 class AulaUsuario(Base):
     __tablename__ = "aula_usuario"
-    aluno_id = Column(Integer, Identity(), ForeignKey("usuario.id"), primary_key =True, nullable=False)
-    aula_id = Column(Integer, Identity(), ForeignKey("aula.id"), primary_key =True, nullable=False)
+    aluno_id = Column(Integer, ForeignKey("usuario.id"), primary_key =True, nullable=False)
+    aula_id = Column(Integer, ForeignKey("aula.id"), primary_key =True, nullable=False)
 
 class ModelAulaUsuario(BaseModel):
     aluno_id: int
@@ -89,10 +89,10 @@ class ModelAulaUsuario(BaseModel):
 
 class Anotacao(Base):
     __tablename__ = "anotacao"
-    id = Column(Integer, Identity(), primary_key = True, nullable=False)
+    id = Column(Integer, primary_key = True, nullable=False)
     data_criacao = Column(DateTime, nullable=False)
     conteudo = Column(Text, nullable=False)
-    aula_id = Column(Integer, Identity(), ForeignKey("aula.id"), nullable=False)
+    aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
 
 class ModelAnotacao(BaseModel):
     id: int
@@ -104,10 +104,10 @@ class ModelAnotacao(BaseModel):
 
 class Redacao(Base):
     __tablename__ = "redacao"
-    id = Column(Integer, Identity(), primary_key = True, nullable=False)
+    id = Column(Integer, primary_key = True, nullable=False)
     tema = Column(String(100), nullable=False)
     eixo_tematico = Column(String(40), nullable=False)
-    aluno_id = Column(Integer, Identity(), ForeignKey("usuario.id"), nullable=False)
+    aluno_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
     escrita = Column(Text, nullable = False, unique=True)
 
 class ModelRedacao(BaseModel):
@@ -121,8 +121,8 @@ class ModelRedacao(BaseModel):
 
 class Simulado(Base):
     __tablename__ = "simulado"
-    id = Column(Integer, Identity(), primary_key = True, nullable=False)
-    aula_id = Column(Integer, Identity(), ForeignKey("aula.id"), nullable=False)
+    id = Column(Integer, primary_key = True, nullable=False)
+    aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
     exame = Column(Text, nullable = False)
 
 class ModelSimulado(BaseModel):
@@ -134,7 +134,7 @@ class ModelSimulado(BaseModel):
 
 class Novidades(Base):
     __tablename__ = "novidades"
-    id = Column(Integer, Identity(), primary_key = True, nullable= False)
+    id = Column(Integer, primary_key = True, nullable= False)
     noticias = Column(Text, nullable = False)
 
 class ModelNovidades(BaseModel):
@@ -145,7 +145,7 @@ class ModelNovidades(BaseModel):
 
 class Materia(Base):
     __tablename__ = "materia"
-    id = Column(Integer, Identity(), primary_key = True, nullable = False)
+    id = Column(Integer, primary_key = True, nullable = False)
     area = Column(String(100), nullable = False, unique = True)
 
 class ModelMateria(BaseModel):
@@ -156,9 +156,9 @@ class ModelMateria(BaseModel):
 
 class Revisao(Base):
     __tablename__ = "revisao"
-    id = Column(Integer, Identity(), primary_key = True, nullable = False)
+    id = Column(Integer, primary_key = True, nullable = False)
     conteudo = Column(Text, nullable=False)
-    aula_id = Column(Integer, Identity(), ForeignKey("aula.id"), nullable = False)
+    aula_id = Column(Integer, ForeignKey("aula.id"), nullable = False)
 
 class ModelRevisao(BaseModel):
     id: int
@@ -169,7 +169,7 @@ class ModelRevisao(BaseModel):
 
 class Neurodivergencia(Base):
     __tablename__ = "neurodivergencia"
-    id = Column(Integer, Identity(), primary_key = True, nullable = False)
+    id = Column(Integer, primary_key = True, nullable = False)
     neurodivergencia = Column(String, nullable = False)
     especificacao = Column(String)
     descricao = Column(Text, nullable = False)
@@ -184,9 +184,9 @@ class ModelNeurodivergencia(BaseModel):
 
 class Premiacao(Base):
     __tablename__ = "premiacao"
-    id = Column(Integer, Identity(), primary_key = True, nullable = False)
+    id = Column(Integer, primary_key = True, nullable = False)
     medalha = Column(Boolean)
-    simulado_id = Column(Integer, Identity(), ForeignKey("simulado.id"), nullable = False)
+    simulado_id = Column(Integer, ForeignKey("simulado.id"), nullable = False)
 
 class ModelPremiacao(BaseModel):
     id: int
