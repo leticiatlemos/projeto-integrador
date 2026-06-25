@@ -3,7 +3,7 @@ import sqlalchemy as sqlalchemy
 import pydantic as pydantic
 
 from fastapi import FastAPI
-from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime, Boolean
+from sqlalchemy import create_engine, Column, String, Integer, Date, Text, ForeignKey, PrimaryKeyConstraint, DateTime, Boolean, Identity
 from sqlalchemy.orm import sessionmaker, declarative_base
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
