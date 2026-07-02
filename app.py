@@ -399,6 +399,19 @@ def buscarPremiacao(id: int):
         return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
     return {"mensagem": "Neurodivergência não encontrada."}
 
+# Pegar ultimo ID
+
+@app.get("usuario-id")
+def buscarID():
+    list = []
+    idMaior = max(list)
+    conexao = SessionLocal()
+    i = conexao.query(Usuario).id()
+    for ii in i:
+        list.append(ii)
+    conexao.close()
+    return {"id": idMaior}
+                                                 
 ## Cadastro de Itens (métodos POST)
 
 @app.post("/usuarioCadastro")
