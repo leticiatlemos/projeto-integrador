@@ -401,16 +401,12 @@ def buscarPremiacao(id: int):
 
 # Pegar ultimo ID
 
-@app.get("usuario-id")
+@app.get("/ids")
 def buscarID():
-    list = []
-    idMaior = max(list)
     conexao = SessionLocal()
-    i = conexao.query(Usuario).id()
-    for ii in i:
-        list.append(ii)
+    idMaior = conexao.query(func.max(Usuario.id)).scalar()
     conexao.close()
-    return {"id": ModelUsuario.model_validate(idMaior).dict()}
+    return {"id": idMaior}
                                                  
 ## Cadastro de Itens (métodos POST)
 
