@@ -410,7 +410,7 @@ def buscarID():
     for ii in i:
         list.append(ii)
     conexao.close()
-    return {"id": idMaior}
+    return {"id": ModelUsuario.model_validate(idMaior).dict()}
                                                  
 ## Cadastro de Itens (métodos POST)
 
