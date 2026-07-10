@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-database_url = "postgresql+psycopg2://focoplus_6pmh_user:eMs126EpWdQTB2qxqamhFo5WIOtb7ovj@dpg-d8k0hc5dt1ts739e4ft0-a.oregon-postgres.render.com/focoplus_6pmh"
+database_url = "postgresql://foco_plus_user:9zN2Q70IUNFFXbywttUoWbN3LwlENecP@dpg-d98db2reo5us73db0dag-a.oregon-postgres.render.com/foco_plus"
 
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind=engine)
