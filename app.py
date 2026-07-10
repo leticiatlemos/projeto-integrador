@@ -78,11 +78,11 @@ class ModelAula(BaseModel):
 
 class AulaUsuario(Base):
     __tablename__ = "aula_usuario"
-    aluno_id = Column(Integer, ForeignKey("usuario.id"), primary_key =True, nullable=False)
+    usuario_id = Column(Integer, ForeignKey("usuario.id"), primary_key =True, nullable=False)
     aula_id = Column(Integer, ForeignKey("aula.id"), primary_key =True, nullable=False)
 
 class ModelAulaUsuario(BaseModel):
-    aluno_id: int
+    usuario_id: int
     aula_id: int
 
     model_config = {"from_attributes": True}
@@ -107,14 +107,14 @@ class Redacao(Base):
     id = Column(Integer, primary_key = True, nullable=False)
     tema = Column(String(100), nullable=False)
     eixo_tematico = Column(String(40), nullable=False)
-    aluno_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
+    usuario_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
     escrita = Column(Text, nullable = False, unique=True)
 
 class ModelRedacao(BaseModel):
     id: int
     tema: str
     eixo_tematico: str
-    aluno_id: int
+    usuario_id: int
     escrita: str
 
     model_config = {"from_attributes": True}
@@ -316,9 +316,9 @@ def buscarAula(id: int):
 
 
 @app.get("/alunoAula/id")
-def buscaAlunoAula(aluno_id: int, aula_id: int):
+def buscaAlunoAula(usuario_id: int, aula_id: int):
     conexao = SessionLocal()
-    us = conexao.query(AulaUsuario).filter(AulaUsuario.aluno_id == aluno_id).first()
+    us = conexao.query(AulaUsuario).filter(AulaUsuario.usuario_id == usuario_id).first()
     au = conexao.query(AulaUsuario).filter(AulaUsuario.aula_id == aula_id).first()
     conexao.close()
     if us and au:
