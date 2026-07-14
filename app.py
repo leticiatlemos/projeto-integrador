@@ -460,8 +460,6 @@ def criarAnotacao(an: ModelAnotacao):
     conexao.close()
     return {"mensagem": "Anotação cadastrada com sucesso!", "anotacao": ModelAnotacao.model_validate(novaAnotacao).dict()}
 
-# fazer: novidades, materia, revisao
-
 @app.post("/redacaoCadastro")
 def criarRedacao(r: ModelRedacao):
     conexao = SessionLocal()
@@ -483,7 +481,7 @@ def criarSimulado(s: ModelSimulado):
     return {"mensagem": "Simulado cadastrado com sucesso!", "simulado": ModelSimulado.model_validate(novoSimulado).dict()}
 
 @app.post("/novidadesCadastro")
-def criarSimulado(n: ModelNovidades):
+def criarNovidade(n: ModelNovidades):
     conexao = SessionLocal()
     novaNovidade = Novidades(**n.dict())
     conexao.add(novaNovidade)
@@ -492,8 +490,18 @@ def criarSimulado(n: ModelNovidades):
     conexao.close()
     return {"mensagem": "Novidade cadastrada com sucesso!", "novidade": ModelNovidades.model_validate(novaNovidade).dict()}
 
+@app.post("/materiaCadastro")
+def criarMateria(m: ModelMateria):
+    conexao = SessionLocal()
+    novaMateria = Materia(**m.dict())
+    conexao.add(novaMateria)
+    conexao.commit()
+    conexao.refresh(novaMateria)
+    conexao.close()
+    return {"mensagem": "Matéria cadastrada com sucesso!", "materia": ModelMateria.model_validate(novaMateria).dict()}
+
 @app.post("/revisaoCadastro")
-def criarSimulado(r: ModelRevisao):
+def criarRevisao(r: ModelRevisao):
     conexao = SessionLocal()
     novaRevisao = Revisao(**r.dict())
     conexao.add(novaRevisao)
@@ -502,15 +510,7 @@ def criarSimulado(r: ModelRevisao):
     conexao.close()
     return {"mensagem": "Revisão cadastrada com sucesso!", "materia": ModelRevisao.model_validate(novaRevisao).dict()}
 
-@app.post("/materiaCadastro")
-def criarSimulado(m: ModelMateria):
-    conexao = SessionLocal()
-    novaMateria = Materia(**m.dict())
-    conexao.add(novaMateria)
-    conexao.commit()
-    conexao.refresh(novaMateria)
-    conexao.close()
-    return {"mensagem": "Matéria cadastrada com sucesso!", "materia": ModelMateria.model_validate(novaMateria).dict()}
+
 
 @app.post("/neurodivergenciaCadastro")
 def criarNeurodivergencia(d: ModelNeurodivergencia):
@@ -524,7 +524,7 @@ def criarNeurodivergencia(d: ModelNeurodivergencia):
     
 
 @app.post("/PremiacaoCadastro")
-def criarNeurodivergencia(p: ModelPremiacao):
+def criarPremiacao(p: ModelPremiacao):
     conexao = SessionLocal()
     novaPremiacao = Premiacao(**p.dict())
     conexao.add(novaNeurodivergencia)
