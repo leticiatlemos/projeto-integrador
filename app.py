@@ -482,7 +482,35 @@ def criarSimulado(s: ModelSimulado):
     conexao.close()
     return {"mensagem": "Simulado cadastrado com sucesso!", "simulado": ModelSimulado.model_validate(novoSimulado).dict()}
 
+@app.post("/novidadesCadastro")
+def criarSimulado(n: ModelNovidades):
+    conexao = SessionLocal()
+    novaNovidade = Novidades(**n.dict())
+    conexao.add(novaNovidade)
+    conexao.commit()
+    conexao.refresh(novaNovidade)
+    conexao.close()
+    return {"mensagem": "Novidade cadastrada com sucesso!", "novidade": ModelNovidades.model_validate(novaNovidade).dict()}
 
+@app.post("/revisaoCadastro")
+def criarSimulado(r: ModelRevisao):
+    conexao = SessionLocal()
+    novaRevisao = Revisao(**r.dict())
+    conexao.add(novaRevisao)
+    conexao.commit()
+    conexao.refresh(novaRevisao)
+    conexao.close()
+    return {"mensagem": "Revisão cadastrada com sucesso!", "materia": ModelRevisao.model_validate(novaRevisao).dict()}
+
+@app.post("/materiaCadastro")
+def criarSimulado(m: ModelMateria):
+    conexao = SessionLocal()
+    novaMateria = Materia(**m.dict())
+    conexao.add(novaMateria)
+    conexao.commit()
+    conexao.refresh(novaMateria)
+    conexao.close()
+    return {"mensagem": "Matéria cadastrada com sucesso!", "materia": ModelMateria.model_validate(novaMateria).dict()}
 
 @app.post("/neurodivergenciaCadastro")
 def criarNeurodivergencia(d: ModelNeurodivergencia):
@@ -493,6 +521,7 @@ def criarNeurodivergencia(d: ModelNeurodivergencia):
     conexao.refresh(novaNeurodivergencia)
     conexao.close()
     return {"mensagem": "Neurodivergencia cadastrada com sucesso!", "neurodivergencia": ModelNeurodivergencia.model_validate(novaNeurodivergencia).dict()}
+    
 
 @app.post("/PremiacaoCadastro")
 def criarNeurodivergencia(p: ModelPremiacao):
