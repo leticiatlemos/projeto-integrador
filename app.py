@@ -276,14 +276,14 @@ def listarNeurodivergencias():
     conexao = SessionLocal()
     neurodivergencias = conexao.query(Neurodivergencia).all()
     conexao.close()
-    return{"neurodivergencias": [ModelRevisao.model_validate(d).dict for d in neurodivergencias]}
+    return{"neurodivergencias": [ModelNeurodivergencia.model_validate(d).dict for d in neurodivergencias]}
 
 @app.get("/premiacao")
 def listarPremiacoes():
     conexao = SessionLocal()
     premiacoes = conexao.query(Premiacao).all()
     conexao.close()
-    return{"premiacoes": [ModelRevisao.model_validate(p).dict for p in premiacoes]}
+    return{"premiacoes": [ModelPremiacao.model_validate(p).dict for p in premiacoes]}
 
 ### Por ID
 
@@ -311,7 +311,7 @@ def buscarAula(id: int):
     a = conexao.query(Aula).filter(Aula.id == id).first()
     conexao.close()
     if a:
-        return{"aulas": ModelUsuario.model_validate(a).dict()}
+        return{"aulas": ModelAula.model_validate(a).dict()}
     return {"mensagem": "Aula não encontrada."}
 
 
@@ -387,17 +387,17 @@ def buscarNeurodivergencia(id: int):
     d = conexao.query(Neurodivergencia).filter(Neurodivergencia.id==id).first()
     conexao.close()
     if d:
-        return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
+        return{"neurodivergencia": ModelNeurodivergencia.model_validate(d).dict()}
     return {"mensagem": "Neurodivergência não encontrada."}
 
 @app.get("premiacao/id")
 def buscarPremiacao(id: int):
     conexao = SessionLocal()
-    p = conexao.query(Premiacao).filter(Neurodivergencia.id==id).first()
+    p = conexao.query(Premiacao).filter(Premiacao.id==id).first()
     conexao.close()
     if d:
-        return{"neurodivergencia": ModelRevisao.model_validate(d).dict()}
-    return {"mensagem": "Neurodivergência não encontrada."}
+        return{"premiacao": ModelPremiacao.model_validate(d).dict()}
+    return {"mensagem": "Premiação não encontrada."}
 
 # Pegar ultimo ID
 
