@@ -25,7 +25,7 @@ class Usuario(Base):
     senha = Column(String(8), nullable=False)
     nome = Column(String(100), nullable=False)
     numero = Column(String(13), nullable=False, unique=True)
-    data_nascimento = Column(Date, nullable=False)
+    data_nascimento = Column(String(10), nullable=False)
     neurodivergencia_id = Column(Integer, ForeignKey("neurodivergencia.id"), nullable=False)
     objetivo = Column(Text, nullable=False)
 
@@ -58,7 +58,7 @@ class Aula(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     titulo = Column(String(100), nullable=False)
     materia_id = Column(Integer, ForeignKey("materia.id"), nullable=False)
-    data_aula = Column(Date, nullable=False)
+    data_aula = Column(String(10), nullable=False)
     conteudo = Column(Text, nullable=False)
     video = Column(Text, nullable=False)
     notes = Column(Text, nullable=False)
@@ -90,7 +90,7 @@ class ModelAulaUsuario(BaseModel):
 class Anotacao(Base):
     __tablename__ = "anotacao"
     id = Column(Integer, primary_key = True, nullable=False)
-    data_criacao = Column(DateTime, nullable=False)
+    data_criacao = Column(String(10), nullable=False)
     conteudo = Column(Text, nullable=False)
     aula_id = Column(Integer, ForeignKey("aula.id"), nullable=False)
 
