@@ -195,6 +195,8 @@ class ModelPremiacao(BaseModel):
 
     model_config = {"from_attributes": True}
 
+Base.metadata.create_all(bind=engine)
+
 # métodos
 ## Listagem de Itens (métodos GET)
 
